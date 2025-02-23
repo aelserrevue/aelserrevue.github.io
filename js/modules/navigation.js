@@ -121,13 +121,14 @@ document.addEventListener('alpine:init', () => {
                     this.item = edition.video.filter(x => x.id == id).at(0);
                     this.item.edition = JSON.parse(JSON.stringify(edition));
                     this.item.year = year;
+                    console.log(this.item);
                     let result = findPrevNext(edition.video,id);
                     this.prev = result.prev;
                     this.next = result.next;
                     localStorage[year] = id;
                 }
                 } finally {
-                    setTimeout(this.reset_lock.bind(this),100);
+                    setTimeout(this.reset_lock.bind(this),1000);
                 }
             },
             reset_lock: function(){this.lock = false},
@@ -174,6 +175,23 @@ document.addEventListener('alpine:init', () => {
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
+            },
+            getLijst: function() {
+                let result = [];
+
+                for (let i = 0; i < localStorage.length; i++) {
+                    let key = localStorage.key(i);
+                    if (key.startsWith("https://revue.b-cdn.net")) {
+                        let elements = key.split("/");
+                        result.push({
+                            url: key,
+                            timestamp: localStorage.getItem(key),
+                            id: `${elements.at(-2)}-${elements.at(-1).replace('.mp4','')}`
+                        });
+                    }
+                }
+
+                return result;
             }
         }
     });

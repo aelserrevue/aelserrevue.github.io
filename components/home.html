@@ -24,22 +24,92 @@
 
             <hr class="my-4 border-t border-gray-300">
 
-            <label x-show="searchReady" x-cloak x-transition
-                   class="input input-bordered input-primary flex items-center gap-2 w-[40%] mb-5">
-                <input type="text" class="grow" x-model="filterString"
-                       @focus="executeFilter"
-                       @keyup.debounce="executeFilter" placeholder="Filter" />
-                <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 16 16"
-                        fill="currentColor"
-                        class="h-4 w-4 opacity-70">
-                    <path
-                            fill-rule="evenodd"
-                            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                            clip-rule="evenodd" />
-                </svg>
-            </label>
+            <div class="flex items-center gap-4 w-full mb-4" x-data="{lijst: []}">
+                <!-- Input met zoekfunctie -->
+                <label x-show="searchReady" x-cloak x-transition
+                       class="input input-bordered input-primary flex items-center gap-2 w-[40%]">
+                    <input type="text" class="grow" x-model="filterString"
+                           @focus="executeFilter"
+                           @keyup.debounce="executeFilter" placeholder="Filter" />
+                    <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 16 16"
+                            fill="currentColor"
+                            class="h-4 w-4 opacity-70">
+                        <path
+                                fill-rule="evenodd"
+                                d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                                clip-rule="evenodd" />
+                    </svg>
+                </label>
+
+                <!-- Knop voor afspeellijst -->
+                <button x-show="lijst.length > 0"
+                        x-init="lijst = getLijst();"
+                        x-cloak x-transition class="btn btn-primary btn-outline" @click="lijst = getLijst();my_modal_2.showModal()">Afspeellijst</button>
+                <dialog id="my_modal_2" class="modal">
+                    <div class="modal-box w-11/12 max-w-5xl">
+                        <h3 class="text-lg font-bold">Afspeellijst</h3>
+                        <div class="grid grid-cols-12 gap-3">
+                            <template x-for="item in lijst" :key="item.id">
+                            <div class="col-span-4 relative"
+                                 x-data="{videoDuration: 0, videoProgress: 0}"
+                                 @click="navigate(item.id)">
+                                <video class="w-full"
+                                       x-effect="play ? $el.play() : $el.pause();"
+                                       @mouseenter="$el.currentTime = parseInt(item.timestamp,10)-10;$el.play();"
+                                       @mouseleave="$el.pause();$el.currentTime = parseInt(item.timestamp,10)"
+                                       @timeupdate="videoProgress = ($el.currentTime / $el.duration) * 100"
+                                       @loadedmetadata="videoDuration = $event.target.duration;$el.pause();$el.currentTime = parseInt(item.timestamp,10);"
+                                       preload="metadata" muted playsinline>
+                                    <source :src="`${item.url}#t=${parseInt(item.timestamp,10)-10},${item.timestamp}`" type="video/mp4">
+                                </video>
+
+                                <button class="absolute top-4 right-4 btn btn-square btn-xs" @click.stop="localStorage.removeItem(item.url);lijst = getLijst();">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+
+                                <div class="w-full absolute bottom-0 left-0">
+                                    <input type="range" min="0" max="100" step="0.1"
+                                           class="range range-xs range-primary w-full"
+                                           disabled
+                                           x-model="videoProgress">
+                                </div>
+
+                                <p class="absolute bottom-4 right-4 text-white shadow-md"
+                                   x-show="videoDuration !=0" x-cloak x-transition
+                                   x-text="formatTime(videoDuration)"></p>
+                            </div>
+                            </template>
+                        </div>
+<!--                        <template x-for="item in lijst" :key="item.id">-->
+<!--                            <div x-data="{videoDuration: 0 }"-->
+<!--                                 @click="navigate(item.id)"-->
+<!--                                 class="card bg-base-100 image-full w-96 shadow-xl mb-5 cursor-pointer">-->
+<!--                                <figure>-->
+<!--                                    <video width="640" height="360"-->
+<!--                                           x-effect="play ? $el.play() : $el.pause();"-->
+<!--                                           @mouseenter="$el.currentTime = parseInt(item.timestamp,10)-10;$el.play();"-->
+<!--                                           @mouseleave="$el.pause();$el.currentTime = parseInt(item.timestamp,10)"-->
+<!--                                           @loadedmetadata="videoDuration = $event.target.duration"-->
+<!--                                           preload="metadata" muted playsinline>-->
+<!--                                        <source :src="`${item.url}#t=${parseInt(item.timestamp,10)-10},${item.timestamp}`" type="video/mp4">-->
+<!--                                    </video>-->
+<!--                                </figure>-->
+<!--                                <div class="card-body relative">-->
+<!--                                    <h2 class="card-title" x-text="item.url"></h2>-->
+<!--                                    <p class="absolute bottom-4 right-4" x-show="videoDuration !=0" x-cloak x-transition x-text="formatTime(videoDuration)"></p>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </template>-->
+                    </div>
+                    <form method="dialog" class="modal-backdrop">
+                        <button>Sluiten</button>
+                    </form>
+                </dialog>
+            </div>
+
+
 
             <div @navigate="navigate($event.detail.id)"
                  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
