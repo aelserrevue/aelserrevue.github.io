@@ -1,0 +1,44 @@
+<template x-component="video">
+    <template x-if="type == 'video' && edit == false">
+        <div>
+            <h1 class="text-2xl font-bold flex items-center gap-2">
+                <span class="text-gray-800" x-text="item.edition.title"></span>:&nbsp;
+                <span class="text-gray-800" x-text="item.title"></span>
+            </h1>
+            <hr class="my-4 border-t border-gray-300">
+
+            <div class="grid grid-cols-12 gap-3">
+                <div class="col-span-9">
+                    <video class="w-[100%]"
+                           @timeupdate="localStorage[item.source] = Math.floor($event.target.currentTime)"
+                           x-effect="console.log(item.source);$el.load()"
+                           @ended="localStorage.removeItem(item.source);localStorage.removeItem(next.source);navigate(next.id)"
+                           preload="metadata" autoplay playsinline controls>
+                        <source :src="localStorage[item.source] ? item.source + '#t=' + localStorage[item.source] : item.source" type="video/mp4">
+                    </video>
+                    <div class="prose"
+                         x-html="applyDaisyUIStyling(marked.parse(item.beschrijving))"></div>
+
+                    <button @click="edit=true" class="btn btn-block btn-sm btn-primary btn-outline my-5">
+                        Heb jij een goede aanvulling? Stuur ‘m op!
+                    </button>
+                </div>
+                <div class="col-span-3">
+                    <ul class="menu bg-base-200 rounded-box w-[100%] mb-5">
+                        <li @click="navigate(prev.id)"
+                            x-show="prev" x-cloak x-transition><a>Veurige: <span x-text="prev.title"></span></a></li>
+                        <li @click="localStorage.removeItem(next.source);navigate(next.id)"
+                            x-show="next" x-cloak x-transition><a>Volgende: <span x-text="next.title"></span></a></li>
+                    </ul>
+                    <ul class="menu bg-base-200 rounded-box w-[100%]">
+                        <template x-for="video in item.edition.video">
+                            <li @click="navigate(video.id)">
+                                <a :class="video.id == item.id ? 'active' : ''" x-text="video.title"></a>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

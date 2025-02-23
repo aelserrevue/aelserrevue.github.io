@@ -50,7 +50,9 @@ document.addEventListener('alpine:init', () => {
             prev: this.$persist(""),
             next: this.$persist(""),
             lock: false,
+            edit: false,
             medewerkers: this.$persist([]),
+            medewerkersText: "",
             init: async function(){
                 try {
                     let response = await fetch("/content/index.json");
@@ -94,6 +96,7 @@ document.addEventListener('alpine:init', () => {
                 if(this.lock){return};
                 try{
                 this.lock = true;
+                this.edit = false;
                 this.navigation = "" + id;
                 this.results = [];
                 this.filterString = "";
@@ -136,7 +139,41 @@ document.addEventListener('alpine:init', () => {
             },
             lees_medewerkers: async function(){
                 let medewerkers = await fetch_markdown(`/content/${this.item.year}/medewerkers.txt`);
-                this.medewerkers = medewerkers.split("\n");
+                this.medewerkers = medewerkers.split("\n").map(x => x.trim());
+            },
+            downloadMarkdownFile: function() {
+                let text = "";
+                let filename = "";
+
+                text += "<!-- id -->\n";
+                text += this.item.id;
+                text += "\n\n";
+
+                text += "<!-- Titel -->\n";
+                text += this.item.title;
+                text += "\n\n";
+
+                text += "<!-- Beschrijving -->\n";
+                text += this.item.beschrijving;
+                text += "\n\n";
+
+                if (this.type == "edition"){
+                    filename = this.item.title + ".md";
+
+                    text += "<!-- Medewerkers -->\n";
+                    text += this.medewerkersText;
+                    text += "\n\n";
+                } else {
+                    filename = this.item.edition.title + " - " + this.item.title + ".md";
+                }
+
+                const blob = new Blob([text], { type: "text/plain" }); // Markdown is gewoon plain text
+                const a = document.createElement("a");
+                a.href = URL.createObjectURL(blob);
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
             }
         }
     });

@@ -1,0 +1,9 @@
+<template x-component="breadcrumbs">
+    <div class="breadcrumbs text-sm mb-5">
+        <ul>
+            <li @click="navigate('home')"><a>Home</a></li>
+            <li @click="navigate(item.year)" x-show="item" x-cloak x-transition><a x-text="item.year"></a></li>
+            <li @click="navigate(item.id)" x-show="item.id.includes('-')" x-cloak x-transition><a x-text="item.title"></a></li>
+        </ul>
+    </div>
+</template>
