@@ -1,0 +1,66 @@
+edition: 2006
+title: SajelTheater
+video:
+- id: 2006-1
+  sequence: 1
+  title: 'Deel: 1'
+- id: 2006-2
+  sequence: 2
+  title: 'Deel: 2'
+- id: 2006-3
+  sequence: 3
+  title: 'Deel: 3'
+- id: 2006-4
+  sequence: 4
+  title: 'Deel: 4'
+- id: 2006-5
+  sequence: 5
+  title: 'Deel: 5'
+- id: 2006-6
+  sequence: 6
+  title: 'Deel: 6'
+- id: 2006-7
+  sequence: 7
+  title: 'Deel: 7'
+- id: 2006-8
+  sequence: 8
+  title: 'Deel: 8'
+- id: 2006-9
+  sequence: 9
+  title: 'Deel: 9'
+- id: 2006-10
+  sequence: 10
+  title: 'Deel: 10'
+- id: 2006-11
+  sequence: 11
+  title: 'Deel: 11'
+- id: 2006-12
+  sequence: 12
+  title: 'Deel: 12'
+- id: 2006-13
+  sequence: 13
+  title: 'Deel: 13'
+- id: 2006-14
+  sequence: 14
+  title: 'Deel: 14'
+- id: 2006-15
+  sequence: 15
+  title: 'Deel: 15'
+- id: 2006-16
+  sequence: 16
+  title: 'Deel: 16'
+- id: 2006-17
+  sequence: 17
+  title: 'Deel: 17'
+- id: 2006-18
+  sequence: 18
+  title: 'Deel: 18'
+- id: 2006-19
+  sequence: 19
+  title: 'Deel: 19'
+- id: 2006-20
+  sequence: 20
+  title: Achter de schermen
+- id: 2006-21
+  sequence: 21
+  title: Slideshow

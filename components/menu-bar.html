@@ -1,0 +1,71 @@
+<template x-component="menu-bar">
+    <div>
+
+        <div class="navbar bg-neutral text-neutral-content">
+            <div class="navbar-start">
+
+            </div>
+            <div class="navbar-center">
+                Aelser Revue Archief
+            </div>
+            <div class="navbar-end">
+
+                <label x-show="searchReady" x-cloak x-transition class="input input-bordered input-primary flex items-center gap-2">
+                    <input type="text" class="grow" x-model="searchString"
+                           @focus="executeSearch"
+                           @keyup.debounce="executeSearch" placeholder="Search" />
+                    <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 16 16"
+                            fill="currentColor"
+                            class="h-4 w-4 opacity-70">
+                        <path
+                                fill-rule="evenodd"
+                                d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                                clip-rule="evenodd" />
+                    </svg>
+                </label>
+
+            </div>
+        </div>
+
+        <div x-show="results.length > 0" x-cloak x-transition
+             @click.outside="results = []"
+             class="fixed top-15 right-10 max-h-[40vh] w-100 overflow-y-auto bg-white p-2 rounded-lg shadow-xl">
+            <template x-for="result in results" :key="result.id">
+
+                <div x-data="{ isVisible: false, play: false, videoDuration: 0 }"
+                     x-intersect.half="isVisible = true;play=true"
+                     x-intersect:leave.half="play = false"
+                     @click="navigate(result.id)"
+                     class="card bg-base-100 image-full w-96 shadow-xl mb-5 cursor-pointer">
+                    <figure>
+                        <template x-if="!result.source && isVisible">
+                            <img
+                                    :src="`/content/${result.id}/poster.jpg`"
+                                    alt="poster" />
+                        </template>
+
+                        <template x-if="result.source">
+                            <video width="640" height="360"
+                                   x-effect="play ? $el.play() : $el.pause();"
+                                   @loadedmetadata="videoDuration = $event.target.duration"
+                                   preload="metadata" muted playsinline>
+                                <source :src="result.source + '#t=60,90'" type="video/mp4">
+                            </video>
+                        </template>
+
+                    </figure>
+                    <div class="card-body relative">
+                        <h2 class="card-title" x-text="result.title"></h2>
+                        <p class="absolute bottom-4 right-4" x-show="videoDuration !=0" x-cloak x-transition x-text="formatTime(videoDuration)"></p>
+                    </div>
+                </div>
+
+            </template>
+        </div>
+
+
+    </div>
+
+</template>

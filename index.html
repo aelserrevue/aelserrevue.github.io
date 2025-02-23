@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Aelser Revue Archief</title>
+
+    <!-- AlpineJS & Vimesh -->
+    <script defer src="/js/tp/alpine-persist.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+    <script src="/js/tp/vimeshui.js"></script>
+    <script src="/js/tp/alpine.js" defer></script>
+
+    <!-- cofig -->
+    <script src="/js/config/setup.js"></script>
+
+    <!-- DaisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="/js/tp/tailwind.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>[x-cloak] { display: none !important; }</style>
+</head>
+<body x-data="navigation" @hashchange.window="
+    let hash = location.hash.replace('#','');
+    navigate(hash);">
+<div x-import="menu-bar">
+    <ui-menu-bar></ui-menu-bar>
+</div>
+
+<div class="grid grid-cols-12 gap-3  mt-5">
+    <div class="col-span-2">
+        <div>
+        </div>
+    </div>
+    <div class="col-span-9">
+
+        <div class="breadcrumbs text-sm mb-5">
+            <ul>
+                <li @click="navigate('home')"><a>Home</a></li>
+                <li @click="navigate(item.year)" x-show="item" x-cloak x-transition><a x-text="item.year"></a></li>
+                <li @click="navigate(item.id)" x-show="item.id.includes('-')" x-cloak x-transition><a x-text="item.title"></a></li>
+            </ul>
+        </div>
+
+        <template x-if="type == 'video'">
+            <div>
+                <h1 class="text-2xl font-bold flex items-center gap-2">
+                    <span class="text-gray-800" x-text="item.edition.title"></span>:&nbsp;
+                    <span class="text-gray-800" x-text="item.title"></span>
+                </h1>
+                <hr class="my-4 border-t border-gray-300">
+
+                <div class="grid grid-cols-12 gap-3">
+                    <div class="col-span-9">
+                        <video class="w-[100%]"
+                               @timeupdate="localStorage[item.source] = Math.floor($event.target.currentTime)"
+                               x-effect="console.log(item.source);$el.load()"
+                               @ended="localStorage.removeItem(item.source);localStorage.removeItem(next.source);navigate(next.id)"
+                               preload="metadata" autoplay playsinline controls>
+                            <source :src="localStorage[item.source] ? item.source + '#t=' + localStorage[item.source] : item.source" type="video/mp4">
+                        </video>
+                        <div class="prose"
+                           x-html="marked.parse(item.beschrijving)"></div>
+                    </div>
+                    <div class="col-span-3">
+                        <ul class="menu bg-base-200 rounded-box w-[100%] mb-5">
+                            <li @click="navigate(prev.id)"
+                                x-show="prev" x-cloak x-transition><a>Veurige: <span x-text="prev.title"></span></a></li>
+                            <li @click="localStorage.removeItem(next.source);navigate(next.id)"
+                                x-show="next" x-cloak x-transition><a>Volgende: <span x-text="next.title"></span></a></li>
+                        </ul>
+                        <ul class="menu bg-base-200 rounded-box w-[100%]">
+                            <template x-for="video in item.edition.video">
+                                <li @click="navigate(video.id)">
+                                    <a :class="video.id == item.id ? 'active' : ''" x-text="video.title"></a>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </template>
+
+        <template x-if="type == 'edition'">
+            <div>
+                <h1 class="text-2xl font-bold flex items-center gap-2" x-text="item.title"></h1>
+                <hr class="my-4 border-t border-gray-300">
+
+                <div class="grid grid-cols-12 gap-3">
+                    <div class="col-span-9">
+                        <div class="prose"
+                             x-html="marked.parse(item.beschrijving)"></div>
+                    </div>
+                    <div class="col-span-3">
+
+                        <img :src="`/content/${item.year}/poster.jpg`" />
+                        <button class="btn btn-block btn-primary btn-outline my-5"
+                                x-show="item.video.length > 0" x-cloak x-transition
+                                @click="localStorage[item.year] ? navigate(localStorage[item.year]) : navigate(item.video.at(0).id)">Opname</button>
+
+                        <ul class="menu bg-base-200 rounded-box w-[100%] mb-5">
+                            <li @click="navigate(next.id)"
+                                x-show="next" x-cloak x-transition><a>Veurige: <span x-text="next.title"></span></a></li>
+                            <li @click="navigate(prev.id)"
+                                x-show="prev" x-cloak x-transition><a>Volgende: <span x-text="prev.title"></span></a></li>
+                        </ul>
+
+                        <div class="overflow-x-auto">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Medewerkers</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <template x-for="name in medewerkers">
+                                    <tr>
+                                        <td x-text="name"></td>
+                                    </tr>
+                                </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </template>
+
+        <template x-if="type == 'home'">
+            <div>
+                <h1 class="text-2xl font-bold flex items-center gap-2">Welkom bij het Aelser Revue Archief</h1>
+                <p class="text-lg flex items-center">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p>
+                <hr class="my-4 border-t border-gray-300">
+
+                <label x-show="searchReady" x-cloak x-transition
+                       class="input input-bordered input-primary flex items-center gap-2 w-[40%] mb-5">
+                    <input type="text" class="grow" x-model="filterString"
+                           @focus="executeFilter"
+                           @keyup.debounce="executeFilter" placeholder="Search" />
+                    <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 16 16"
+                            fill="currentColor"
+                            class="h-4 w-4 opacity-70">
+                        <path
+                                fill-rule="evenodd"
+                                d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                                clip-rule="evenodd" />
+                    </svg>
+                </label>
+
+                <div @navigate="navigate($event.detail.id)"
+                     class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+                    <!-- Card component -->
+                    <template x-for="item in editions" :key="item.year">
+                        <div x-show="!filterString || filters.includes(String(item.year))" x-cloak x-transition
+                             class="card bg-base-100 shadow-xl overflow-hidden cursor-pointer">
+                            <figure class="w-full h-auto" @click="$dispatch('navigate', { id: item.year })">
+                                <img :src="`/content/${item.year}/poster.jpg`" :alt="item.title" class="w-full h-auto object-cover">
+                            </figure>
+                        </div>
+                    </template>
+
+                </div>
+            </div>
+        </template>
+
+    </div>
+</div>
+
+<!-- tp -->
+<script src="/js/tp/minisearch.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<!-- utils -->
+<script src="/js/utils/helper.js"></script>
+<script src="/delete-queue/searchindex.js"></script>
+
+<!-- customs -->
+<script src="/js/modules/navigation.js"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+edition: 2007
+title: SajelGebaorte
+video:
+- id: 2007-1
+  sequence: 1
+  title: 'Deel: 1'
+- id: 2007-2
+  sequence: 2
+  title: 'Deel: 2'
+- id: 2007-3
+  sequence: 3
+  title: 'Deel: 3'
+- id: 2007-4
+  sequence: 4
+  title: 'Deel: 4'
+- id: 2007-5
+  sequence: 5
+  title: 'Deel: 5'
+- id: 2007-6
+  sequence: 6
+  title: 'Deel: 6'
+- id: 2007-7
+  sequence: 7
+  title: 'Deel: 7'
+- id: 2007-8
+  sequence: 8
+  title: 'Deel: 8'
+- id: 2007-9
+  sequence: 9
+  title: 'Deel: 9'
+- id: 2007-10
+  sequence: 10
+  title: 'Deel: 10'
+- id: 2007-11
+  sequence: 11
+  title: 'Deel: 11'
+- id: 2007-12
+  sequence: 12
+  title: Achter de schermen
+- id: 2007-13
+  sequence: 13
+  title: Slideshow
