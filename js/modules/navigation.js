@@ -16,10 +16,28 @@ function findPrevNext(array, id) {
     };
 }
 
+function applyDaisyUIStyling(html) {
+    let div = document.createElement("div");
+    div.innerHTML = html;
+
+    // Voeg DaisyUI styling toe aan relevante elementen
+    div.querySelectorAll("p").forEach(el => el.classList.add("mb-4"));
+    div.querySelectorAll("h1").forEach(el => el.classList.add("text-3xl", "font-bold", "mb-4"));
+    div.querySelectorAll("h2").forEach(el => el.classList.add("text-2xl", "font-semibold", "mb-3"));
+    div.querySelectorAll("h3").forEach(el => el.classList.add("text-xl", "font-semibold", "mb-2"));
+    div.querySelectorAll("ul").forEach(el => el.classList.add("list-disc", "ml-5", "mb-4"));
+    div.querySelectorAll("ol").forEach(el => el.classList.add("list-decimal", "ml-5", "mb-4"));
+    div.querySelectorAll("blockquote").forEach(el => el.classList.add("border-l-4", "border-gray-400", "pl-4", "italic", "mb-4"));
+    div.querySelectorAll("code").forEach(el => el.classList.add("bg-gray-100", "px-1", "rounded"));
+    div.querySelectorAll("pre").forEach(el => el.classList.add("bg-gray-900", "text-white", "p-4", "rounded-lg", "overflow-x-auto"));
+
+    return div.innerHTML;
+}
+
 document.addEventListener('alpine:init', () => {
     Alpine.data('navigation', function(){
         return {
-            navigation: this.$persist("home"),
+            navigation: this.$persist(""),
             type: this.$persist(""),
             item: this.$persist({}),
             miniSearch: null,
@@ -44,6 +62,9 @@ document.addEventListener('alpine:init', () => {
                     console.error("Fout bij ophalen van data:", error);
                   }
 
+                if (this.navigation == ""){
+                    this.navigate("home");
+                }
                 this.miniSearch = new MiniSearch({
                   fields: ['title', 'beschrijving','id'], // Velden waarin gezocht wordt
                   storeFields: ['id', 'beschrijving', 'title','source'], // Velden die worden teruggegeven

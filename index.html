@@ -59,7 +59,7 @@
                             <source :src="localStorage[item.source] ? item.source + '#t=' + localStorage[item.source] : item.source" type="video/mp4">
                         </video>
                         <div class="prose"
-                           x-html="marked.parse(item.beschrijving)"></div>
+                           x-html="applyDaisyUIStyling(marked.parse(item.beschrijving))"></div>
                     </div>
                     <div class="col-span-3">
                         <ul class="menu bg-base-200 rounded-box w-[100%] mb-5">
@@ -89,14 +89,9 @@
                 <div class="grid grid-cols-12 gap-3">
                     <div class="col-span-9">
                         <div class="prose"
-                             x-html="marked.parse(item.beschrijving)"></div>
+                             x-html="applyDaisyUIStyling(marked.parse(item.beschrijving))"></div>
                     </div>
                     <div class="col-span-3">
-
-                        <img :src="`/content/${item.year}/poster.jpg`" />
-                        <button class="btn btn-block btn-primary btn-outline my-5"
-                                x-show="item.video.length > 0" x-cloak x-transition
-                                @click="localStorage[item.year] ? navigate(localStorage[item.year]) : navigate(item.video.at(0).id)">Opname</button>
 
                         <ul class="menu bg-base-200 rounded-box w-[100%] mb-5">
                             <li @click="navigate(next.id)"
@@ -104,6 +99,11 @@
                             <li @click="navigate(prev.id)"
                                 x-show="prev" x-cloak x-transition><a>Volgende: <span x-text="prev.title"></span></a></li>
                         </ul>
+                        
+                        <img :src="`/content/${item.year}/poster.jpg`" />
+                        <button class="btn btn-block btn-primary btn-outline my-5"
+                                x-show="item.video.length > 0" x-cloak x-transition
+                                @click="localStorage[item.year] ? navigate(localStorage[item.year]) : navigate(item.video.at(0).id)">Opname</button>
 
                         <div class="overflow-x-auto">
                             <table class="table">
