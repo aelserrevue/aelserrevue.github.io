@@ -81,6 +81,10 @@
                                    x-text="formatTime(videoDuration)"></p>
                             </div>
                             </template>
+                            <div class="col-span-12" x-show="lijst.length > 9" x-cloak x-transition>
+                                <button @click="lijst.forEach(item => localStorage.removeItem(item.url));lijst = getLijst();"
+                                        class="btn btn-block btn-outline btn-error">maak afspeellijst leeg</button>
+                            </div>
                         </div>
 <!--                        <template x-for="item in lijst" :key="item.id">-->
 <!--                            <div x-data="{videoDuration: 0 }"-->

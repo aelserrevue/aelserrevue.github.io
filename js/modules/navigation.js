@@ -59,9 +59,6 @@ document.addEventListener('alpine:init', () => {
                     console.error("Fout bij ophalen van data:", error);
                   }
 
-                if (this.navigation == ""){
-                    this.navigate("home");
-                }
                 this.miniSearch = new MiniSearch({
                   fields: ['title', 'description','id','crew'], // Velden waarin gezocht wordt
                   storeFields: ['id', 'description', 'title','source', 'crew'], // Velden die worden teruggegeven
@@ -73,7 +70,10 @@ document.addEventListener('alpine:init', () => {
 
                 this.miniSearch.addAll(this.editions);
                 this.searchReady = true;
-                console.timeEnd("Data & Search engine initialization"); // Eindigt en toont tijd in ms
+                console.timeEnd("Data & Search engine initialization");
+                window.addEventListener("hashchange", this.navigate_on_hash_change.bind(this));
+                this.navigate_on_hash_change();
+                if (this.navigation == ""){this.navigate("home")}
             },
             executeSearch: function(){
                 this.results = this.raw_search(this.searchString);
@@ -130,6 +130,17 @@ document.addEventListener('alpine:init', () => {
                 } finally {
                     setTimeout(this.reset_lock.bind(this),1000);
                 }
+            },
+            navigate_on_hash_change: function(){
+                if (!location.hash){return}
+                let req = location.hash.replace("#","").split("/")
+                if (req.length > 1){
+                    try{
+                        let video = this.miniSearch.search(req.at(0), { fields: ['id']}).filter(x => x.id == req.at(0)).at(0);
+                        localStorage[video.source] = parseInt(req.at(1));
+                    } catch{}
+                }
+                this.navigate(req.at(0));
             },
             reset_lock: function(){this.lock = false},
             formatTime: function(seconds) {

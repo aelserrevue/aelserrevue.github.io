@@ -19,9 +19,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>[x-cloak] { display: none !important; }</style>
 </head>
-<body x-data="navigation" @hashchange.window="
-    let hash = location.hash.replace('#','');
-    navigate(hash);">
+<body x-data="navigation">
 <div x-import="menu-bar">
     <ui-menu-bar></ui-menu-bar>
 </div>
