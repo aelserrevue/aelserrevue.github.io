@@ -1,10 +1,4 @@
 
-async function fetch_markdown(path){
-    let response = await fetch(path);
-    if (!response.ok) return "";
-    return await response.text();
-}
-
 function findPrevNext(array, id) {
     let index = array.findIndex(item => item.id === id);
 
@@ -54,6 +48,7 @@ document.addEventListener('alpine:init', () => {
             medewerkers: this.$persist([]),
             medewerkersText: "",
             init: async function(){
+                console.time("Data & Search engine initialization"); // Start de timer
                 try {
                     let response = await fetch("/content/index.json");
                     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -68,28 +63,33 @@ document.addEventListener('alpine:init', () => {
                     this.navigate("home");
                 }
                 this.miniSearch = new MiniSearch({
-                  fields: ['title', 'beschrijving','id'], // Velden waarin gezocht wordt
-                  storeFields: ['id', 'beschrijving', 'title','source'], // Velden die worden teruggegeven
+                  fields: ['title', 'description','id','crew'], // Velden waarin gezocht wordt
+                  storeFields: ['id', 'description', 'title','source', 'crew'], // Velden die worden teruggegeven
                 });
-                this.searchReady = true;
 
                 for (let edition of this.editions) {
-                    edition.id = edition.year;
-                    edition["beschrijving"] = await fetch_markdown("/content/" + edition.edition + "/README.md");
-                    for (let video of edition.video){
-                        video["beschrijving"] = await fetch_markdown("/content/" + edition.edition + "/video/" + edition.edition + "-" + video.sequence + ".md");
-                        video["source"] = `https://revue.b-cdn.net/${edition.edition}/${video.sequence}.mp4`;
-                    }
                     this.miniSearch.addAll(edition.video);
                 }
 
                 this.miniSearch.addAll(this.editions);
+                this.searchReady = true;
+                console.timeEnd("Data & Search engine initialization"); // Eindigt en toont tijd in ms
             },
             executeSearch: function(){
-                this.results = this.miniSearch.search(this.searchString,{fuzzy: 0.1, prefix:true});
+                this.results = this.raw_search(this.searchString);
             },
             executeFilter: function(){
-                this.filters = this.miniSearch.search(this.filterString,{fuzzy: 0.1, prefix:true}).map(x => String(x.id).split("-").at(0));
+                this.filters = this.raw_search(this.filterString).map(x => String(x.id).split("-").at(0));
+            },
+            raw_search: function(query){
+                let pq = query.toLowerCase();
+                let results = this.miniSearch.search(pq,{fuzzy: 0.1, prefix:true});
+                results = results.filter(x =>
+                    x.title.toLowerCase().includes(pq) ||
+                    x.description.toLowerCase().includes(pq) ||
+                    (x.crew && x.crew.toLowerCase().includes(pq)) ||
+                    x.id.toLowerCase().includes(pq));
+                return results;
             },
             navigate: function(id){
                 location.hash = id;
@@ -139,8 +139,7 @@ document.addEventListener('alpine:init', () => {
                 return `${h > 0 ? h + ':' : ''}${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
             },
             lees_medewerkers: async function(){
-                let medewerkers = await fetch_markdown(`/content/${this.item.year}/medewerkers.txt`);
-                this.medewerkers = medewerkers.split("\n").map(x => x.trim());
+                this.medewerkers = this.item.crew.split("\n").map(x => x.trim());
             },
             downloadMarkdownFile: function() {
                 let text = "";

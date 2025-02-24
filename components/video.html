@@ -17,7 +17,7 @@
                         <source :src="localStorage[item.source] ? item.source + '#t=' + localStorage[item.source] : item.source" type="video/mp4">
                     </video>
                     <div class="prose"
-                         x-html="applyDaisyUIStyling(marked.parse(item.beschrijving))"></div>
+                         x-html="applyDaisyUIStyling(marked.parse(item.description))"></div>
 
                     <button @click="edit=true" class="btn btn-block btn-sm btn-primary btn-outline my-5">
                         Heb jij een goede aanvulling? Stuur ‘m op!

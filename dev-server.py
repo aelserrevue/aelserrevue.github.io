@@ -57,13 +57,24 @@ def get_sorted_yaml_data(content_dir="./content"):
     for folder in os.listdir(content_dir):
         folder_path = os.path.join(content_dir, folder)
         yaml_file = os.path.join(folder_path, "data.yaml")
-
+        readme = os.path.join(folder_path, "README.md")
+        medewerkers = os.path.join(folder_path, "medewerkers.txt")
         # Controleer of de folder een jaartal is en het YAML-bestand bestaat
         if folder.isdigit() and os.path.exists(yaml_file):
             with open(yaml_file, "r", encoding="utf-8") as f:
                 yaml_data = yaml.safe_load(f)  # Laad YAML-inhoud als een dictionary
                 yaml_data["year"] = int(folder)  # Voeg het jaartal toe aan het object
-                data_list.append(yaml_data)  # Voeg toe aan de lijst
+                yaml_data["id"] = str(yaml_data["edition"])
+            with open(readme,"r") as f:
+                yaml_data["description"] = f.read()
+            with open(medewerkers,"r") as f:
+                yaml_data["crew"] = f.read().replace("\n ","\n").strip()
+            for video in yaml_data["video"]:
+                readme = os.path.join(folder_path, "video/" + video["id"] + ".md")
+                with open(readme,"r") as f:
+                    video["description"] = f.read()
+                    video["source"] = f"https://revue.b-cdn.net/{yaml_data['year']}/{video['sequence']}.mp4"
+            data_list.append(yaml_data)  # Voeg toe aan de lijst
 
     # Sorteer van 2025 naar 1978
     sorted_data = sorted(data_list, key=lambda x: x["year"], reverse=True)
