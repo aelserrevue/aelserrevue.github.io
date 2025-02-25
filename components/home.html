@@ -61,7 +61,7 @@
                                        @mouseleave="$el.pause();$el.currentTime = parseInt(item.timestamp,10)"
                                        @timeupdate="videoProgress = ($el.currentTime / $el.duration) * 100"
                                        @loadedmetadata="videoDuration = $event.target.duration;$el.pause();$el.currentTime = parseInt(item.timestamp,10);"
-                                       preload="metadata" muted playsinline>
+                                       preload="metadata" playsinline>
                                     <source :src="`${item.url}#t=${parseInt(item.timestamp,10)-10},${item.timestamp}`" type="video/mp4">
                                 </video>
 
