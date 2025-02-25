@@ -30,7 +30,7 @@
                        class="input input-bordered input-primary flex items-center gap-2 w-[40%]">
                     <input type="text" class="grow" x-model="filterString"
                            @focus="executeFilter"
-                           @keyup.debounce="executeFilter" placeholder="Filter" />
+                           @keyup.debounce="executeFilter" placeholder="Filter edities" />
                     <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 16 16"
@@ -86,26 +86,6 @@
                                         class="btn btn-block btn-outline btn-error">maak afspeellijst leeg</button>
                             </div>
                         </div>
-<!--                        <template x-for="item in lijst" :key="item.id">-->
-<!--                            <div x-data="{videoDuration: 0 }"-->
-<!--                                 @click="navigate(item.id)"-->
-<!--                                 class="card bg-base-100 image-full w-96 shadow-xl mb-5 cursor-pointer">-->
-<!--                                <figure>-->
-<!--                                    <video width="640" height="360"-->
-<!--                                           x-effect="play ? $el.play() : $el.pause();"-->
-<!--                                           @mouseenter="$el.currentTime = parseInt(item.timestamp,10)-10;$el.play();"-->
-<!--                                           @mouseleave="$el.pause();$el.currentTime = parseInt(item.timestamp,10)"-->
-<!--                                           @loadedmetadata="videoDuration = $event.target.duration"-->
-<!--                                           preload="metadata" muted playsinline>-->
-<!--                                        <source :src="`${item.url}#t=${parseInt(item.timestamp,10)-10},${item.timestamp}`" type="video/mp4">-->
-<!--                                    </video>-->
-<!--                                </figure>-->
-<!--                                <div class="card-body relative">-->
-<!--                                    <h2 class="card-title" x-text="item.url"></h2>-->
-<!--                                    <p class="absolute bottom-4 right-4" x-show="videoDuration !=0" x-cloak x-transition x-text="formatTime(videoDuration)"></p>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </template>-->
                     </div>
                     <form method="dialog" class="modal-backdrop">
                         <button>Sluiten</button>
