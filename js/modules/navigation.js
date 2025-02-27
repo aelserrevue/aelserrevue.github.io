@@ -1,7 +1,6 @@
 
 function findPrevNext(array, id) {
     let index = array.findIndex(item => item.id === id);
-
     if (index === -1) return { prev: null, next: null }; // ID niet gevonden
 
     return {
@@ -27,6 +26,7 @@ function applyDaisyUIStyling(html) {
 
     return div.innerHTML;
 }
+let videos = {};
 
 document.addEventListener('alpine:init', () => {
     Alpine.data('navigation', function(){
@@ -46,6 +46,7 @@ document.addEventListener('alpine:init', () => {
             lock: false,
             edit: false,
             medewerkers: this.$persist([]),
+            names: {},
             medewerkersText: "",
             init: async function(){
                 console.time("Data & Search engine initialization"); // Start de timer
@@ -65,6 +66,7 @@ document.addEventListener('alpine:init', () => {
                 });
 
                 for (let edition of this.editions) {
+                    edition.video.forEach(x => videos[x.id] = x);
                     this.miniSearch.addAll(edition.video);
                 }
 
@@ -74,6 +76,15 @@ document.addEventListener('alpine:init', () => {
                 window.addEventListener("hashchange", this.navigate_on_hash_change.bind(this));
                 this.navigate_on_hash_change();
                 if (this.navigation == ""){this.navigate("home")}
+                this.editions.forEach(edition => {
+                    edition.crew.split("\n").forEach(name => {
+                        let input = name.replaceAll(" ","+");
+                        let query = input.toLowerCase();
+                        if (!(query in this.names)){
+                            this.names[query] = input;
+                        }
+                    });
+                });
             },
             executeSearch: function(){
                 this.results = this.raw_search(this.searchString);
@@ -83,13 +94,18 @@ document.addEventListener('alpine:init', () => {
             },
             raw_search: function(query){
                 let pq = query.toLowerCase();
-                let results = this.miniSearch.search(pq,{fuzzy: 0.1, prefix:true});
-                results = results.filter(x =>
-                    x.title.toLowerCase().includes(pq) ||
-                    x.description.toLowerCase().includes(pq) ||
-                    (x.crew && x.crew.toLowerCase().includes(pq)) ||
-                    x.id.toLowerCase().includes(pq));
-                return results;
+                if (pq.includes("+")){
+                    pq = pq.replaceAll("+"," ");
+                    let results = this.miniSearch.search(pq,{fuzzy: 0.1, prefix:true});
+                    results = results.filter(x =>
+                        x.title.toLowerCase().includes(pq) ||
+                        x.description.toLowerCase().includes(pq) ||
+                        (x.crew && x.crew.toLowerCase().includes(pq)) ||
+                        x.id.toLowerCase().includes(pq));
+                    return results;
+                } else {
+                    return this.miniSearch.search(pq,{fuzzy: 0.1, prefix:true});
+                }
             },
             navigate: function(id){
                 location.hash = id;
@@ -129,6 +145,10 @@ document.addEventListener('alpine:init', () => {
                 }
                 } finally {
                     setTimeout(this.reset_lock.bind(this),1000);
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth' // Voegt een soepele animatie toe
+                    });
                 }
             },
             navigate_on_hash_change: function(){
@@ -193,15 +213,36 @@ document.addEventListener('alpine:init', () => {
                     let key = localStorage.key(i);
                     if (key.startsWith("https://revue.b-cdn.net")) {
                         let elements = key.split("/");
+                        let id = `${elements.at(-2)}-${elements.at(-1).replace('.mp4','')}`;
                         result.push({
                             url: key,
                             timestamp: localStorage.getItem(key),
-                            id: `${elements.at(-2)}-${elements.at(-1).replace('.mp4','')}`
+                            id: id,
+                            year: elements.at(-2),
+                            title: videos[id].title
                         });
                     }
                 }
 
                 return result;
+            },
+            updateSuggestions: function(searchString) {
+                if (this.lock){return this.suggesties}
+                this.lock = true;
+                try{
+                    let suggestions = this.miniSearch.autoSuggest(searchString);
+                    let maxSpaces = (searchString.match(/ /g) || []).length + 1; // Max 1 extra spatie
+                    suggestions = suggestions.filter(suggestie => (suggestie.suggestion.match(/ /g) || []).length <= maxSpaces)
+                    suggestions = suggestions.map(x => x.suggestion);
+                    if (searchString.length > 5){
+                        Object.keys(this.names).filter(query => query.includes(searchString.toLowerCase().replaceAll(" ","+"))).forEach(query => {
+                            suggestions.unshift(this.names[query]);
+                        });
+                    }
+                    return suggestions.slice(0,5);
+                } finally{
+                    setTimeout(this.reset_lock.bind(this),100);
+                }
             }
         }
     });

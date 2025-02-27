@@ -9,57 +9,80 @@
                 Aelser Revue Archief
             </div>
             <div class="navbar-end">
-
-                <label x-show="searchReady" x-cloak x-transition class="input input-bordered input-primary flex items-center gap-2">
-                    <input type="text" class="grow" x-model="searchString"
-                           @focus="executeSearch"
-                           @keyup.debounce="executeSearch" placeholder="Doorzoek het archief" />
-                    <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 16 16"
-                            fill="currentColor"
-                            class="h-4 w-4 opacity-70">
-                        <path
-                                fill-rule="evenodd"
-                                d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                                clip-rule="evenodd" />
-                    </svg>
-                </label>
-
+                <div
+                     x-data="{suggesties: [],geselecteerdeIndex: -1}"
+                     @click.away="suggesties = []">
+                    <label x-show="searchReady" x-cloak x-transition
+                           class="input input-bordered input-primary flex items-center gap-2">
+                        <input type="text" class="grow" x-model="searchString"
+                               @focus="executeSearch();suggesties = updateSuggestions(searchString)"
+                               @keydown.arrow-down.prevent="geselecteerdeIndex = (geselecteerdeIndex + 1) % suggesties.length"
+                               @keydown.arrow-up.prevent="geselecteerdeIndex = (geselecteerdeIndex - 1 + suggesties.length) % suggesties.length"
+                               @keydown.enter.prevent="if (geselecteerdeIndex >= 0) { searchString = suggesties[geselecteerdeIndex]; suggesties = []; executeSearch(); }"
+                               @keyup.debounce="executeSearch();suggesties = updateSuggestions(searchString)" placeholder="Doorzoek het archief" />
+                        <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 16 16"
+                                fill="currentColor"
+                                class="h-4 w-4 opacity-70">
+                            <path
+                                    fill-rule="evenodd"
+                                    d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                                    clip-rule="evenodd" />
+                        </svg>
+                    </label>
+                    <ul x-show="suggesties.length > 0" x-cloak
+                        class="fixed w-full bg-white mt-2 border shadow-lg rounded-lg z-50 max-h-[50vh] overflow-y-auto">
+                        <template x-for="(suggestie, index) in suggesties" :key="suggestie">
+                            <li @click="searchString = suggestie; suggesties = []; executeSearch();"
+                                :class="{'bg-primary text-white': index === geselecteerdeIndex}"
+                                class="p-2 cursor-pointer hover:bg-primary hover:text-white">
+                                <span x-text="suggestie"></span>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
             </div>
         </div>
 
         <div x-show="results.length > 0" x-cloak x-transition
              @click.outside="results = []"
-             class="fixed top-15 right-10 max-h-[40vh] w-100 overflow-y-auto bg-base-300 p-2 rounded-lg shadow-xl z-50">
+             class="fixed top-15 right-[15vw] max-h-[40vh] w-100 overflow-y-auto bg-base-300 p-2 rounded-lg shadow-xl z-50">
             <template x-for="result in results" :key="result.id">
 
                 <div x-data="{ isVisible: false, play: false, videoDuration: 0 }"
                      x-intersect.half="isVisible = true;play=true"
                      x-intersect:leave.half="play = false"
                      @click="navigate(result.id)"
-                     class="card bg-base-100 image-full w-96 shadow-xl mb-5 cursor-pointer">
-                    <figure>
+                     class="card bg-base-100 w-96 shadow-xl mb-5 cursor-pointer rounded-lg overflow-hidden"
+                     style="background: transparent !important;">
+
+                    <figure class="relative">
                         <template x-if="!result.source && isVisible">
-                            <img
-                                    :src="`/content/${result.id}/poster.jpg`"
-                                    alt="poster" />
+                            <img :src="`/content/${result.id}/poster.jpg`" alt="poster" class="w-full h-auto rounded-t-lg" />
                         </template>
 
                         <template x-if="result.source">
                             <video width="640" height="360"
                                    x-effect="play ? $el.play() : $el.pause();"
                                    @loadedmetadata="videoDuration = $event.target.duration"
-                                   preload="metadata" muted playsinline>
+                                   preload="metadata" muted playsinline
+                                   class="w-full rounded-t-lg">
                                 <source :src="result.source + '#t=60,90'" type="video/mp4">
                             </video>
                         </template>
 
+                        <!-- Tekst over video -->
+                        <div class="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black/60 via-black/30 to-transparent text-white rounded-t-lg">
+                            <div class="flex justify-between items-center w-full">
+                                <h2 class="text-lg font-bold">
+                                    <span x-text="result.id.split('-').at(0)"></span>:&nbsp;
+                                    <span x-text="result.title"></span>
+                                </h2>
+                                <p class="text-sm text-right" x-show="videoDuration != 0" x-cloak x-transition x-text="formatTime(videoDuration)"></p>
+                            </div>
+                        </div>
                     </figure>
-                    <div class="card-body relative">
-                        <h2 class="card-title" x-text="result.title"></h2>
-                        <p class="absolute bottom-4 right-4" x-show="videoDuration !=0" x-cloak x-transition x-text="formatTime(videoDuration)"></p>
-                    </div>
                 </div>
 
             </template>

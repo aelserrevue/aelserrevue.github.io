@@ -24,24 +24,39 @@
 
             <hr class="my-4 border-t border-gray-300">
 
-            <div class="flex items-center gap-4 w-full mb-4" x-data="{lijst: []}">
+            <div class="flex items-center gap-4 w-full mb-4" x-data="{lijst: [], suggesties: [],geselecteerdeIndex: -1}">
                 <!-- Input met zoekfunctie -->
-                <label x-show="searchReady" x-cloak x-transition
-                       class="input input-bordered input-primary flex items-center gap-2 w-[40%]">
-                    <input type="text" class="grow" x-model="filterString"
-                           @focus="executeFilter"
-                           @keyup.debounce="executeFilter" placeholder="Filter edities" />
-                    <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 16 16"
-                            fill="currentColor"
-                            class="h-4 w-4 opacity-70">
-                        <path
+                <div class="relative" @click.away="suggesties = []">
+                    <label x-show="searchReady" x-cloak x-transition
+                           class="input input-bordered input-primary flex items-center gap-2 w-full">
+                        <input type="text" class="grow" x-model="filterString"
+                               @focus="executeFilter();suggesties = updateSuggestions(filterString)"
+                               @keydown.arrow-down.prevent="geselecteerdeIndex = (geselecteerdeIndex + 1) % suggesties.length"
+                               @keydown.arrow-up.prevent="geselecteerdeIndex = (geselecteerdeIndex - 1 + suggesties.length) % suggesties.length"
+                               @keydown.enter.prevent="if (geselecteerdeIndex >= 0) { filterString = suggesties[geselecteerdeIndex]; suggesties = []; executeFilter(); }"
+                               @keyup.debounce="executeFilter();suggesties = updateSuggestions(filterString)" placeholder="Filter edities" />
+                        <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 16 16"
+                                fill="currentColor"
+                                class="h-4 w-4 opacity-70">
+                            <path
                                 fill-rule="evenodd"
                                 d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
                                 clip-rule="evenodd" />
-                    </svg>
-                </label>
+                        </svg>
+                    </label>
+
+                    <ul x-show="suggesties.length > 0" x-cloak class="absolute w-full bg-white mt-2 border shadow-lg rounded-lg z-10 max-h-80 overflow-y-auto">
+                        <template x-for="(suggestie, index) in suggesties" :key="suggestie">
+                            <li @click="filterString = suggestie; suggesties = []; executeFilter();"
+                                :class="{'bg-primary text-white': index === geselecteerdeIndex}"
+                                class="p-2 cursor-pointer hover:bg-primary hover:text-white">
+                                <span x-text="suggestie"></span>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
 
                 <!-- Knop voor afspeellijst -->
                 <button x-show="lijst.length > 0"
@@ -65,7 +80,11 @@
                                     <source :src="`${item.url}#t=${parseInt(item.timestamp,10)-10},${item.timestamp}`" type="video/mp4">
                                 </video>
 
-                                <button class="absolute top-4 right-4 btn btn-square btn-xs" @click.stop="localStorage.removeItem(item.url);lijst = getLijst();">
+                                <p class="absolute top-1 left-4 text-white text-lg">
+                                    <span x-text="item.year"></span>:&nbsp;
+                                    <span x-text="item.title"></span>
+                                </p>
+                                <button class="absolute top-2 right-4 btn btn-square btn-xs" @click.stop="localStorage.removeItem(item.url);lijst = getLijst();">
                                     <i class="fa-solid fa-xmark"></i>
                                 </button>
 
@@ -101,14 +120,17 @@
                 <!-- Card component -->
                 <template x-for="item in editions" :key="item.year">
                     <div x-show="!filterString || filters.includes(String(item.year))" x-cloak x-transition
-                         class="card bg-base-100 shadow-xl overflow-hidden cursor-pointer">
-                        <figure class="w-full h-auto" @click="$dispatch('navigate', { id: item.year })">
-                            <img :src="`/content/${item.year}/poster.jpg`" :alt="item.title" class="w-full h-auto object-cover">
+                         class="card bg-base-100 shadow-xl cursor-pointer h-fit p-0 rounded-lg">
+                        <figure class="w-full rounded-lg overflow-hidden" @click="$dispatch('navigate', { id: item.year })">
+                            <img :src="`/content/${item.year}/poster.jpg`"
+                                 :alt="item.title"
+                                 class="w-full h-auto aspect-auto rounded-lg">
                         </figure>
                     </div>
                 </template>
 
             </div>
+
         </div>
     </template>
 </template>
