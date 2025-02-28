@@ -16,6 +16,15 @@
                            preload="metadata" autoplay playsinline controls>
                         <source :src="localStorage[item.source] ? item.source + '#t=' + localStorage[item.source] : item.source" type="video/mp4">
                     </video>
+
+                    <div class="flex justify-end">
+                        <button class="btn btn-primary btn-outline btn-xs my-5"
+                                @click="shareLink">
+                            <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                            Deel
+                        </button>
+                    </div>
+
                     <div class="prose"
                          x-html="applyDaisyUIStyling(marked.parse(item.description))"></div>
 

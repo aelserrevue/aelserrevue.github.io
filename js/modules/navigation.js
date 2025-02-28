@@ -243,6 +243,22 @@ document.addEventListener('alpine:init', () => {
                 } finally{
                     setTimeout(this.reset_lock.bind(this),100);
                 }
+            },
+            shareLink: function() {
+                const url = window.location.href + "/" + localStorage.getItem(this.item.source);
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+                if (navigator.share && isMobile) {
+                    navigator.share({
+                        title: document.title,
+                        text: "Check deze link:",
+                        url: url
+                    }).catch((err) => console.log("Delen geannuleerd", err));
+                } else {
+                    navigator.clipboard.writeText(url).then(() => {
+                        alert("🔗 Link gekopieerd naar klembord!");
+                    }).catch(err => console.log("Fout bij kopiëren", err));
+                }
             }
         }
     });
