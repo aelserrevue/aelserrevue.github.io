@@ -71,9 +71,12 @@ def get_sorted_yaml_data(content_dir="./content"):
                 yaml_data["crew"] = f.read().replace("\n ","\n").strip()
             for video in yaml_data["video"]:
                 readme = os.path.join(folder_path, "video/" + video["id"] + ".md")
-                with open(readme,"r") as f:
-                    video["description"] = f.read()
-                    video["source"] = f"https://revue.b-cdn.net/{yaml_data['year']}/{video['sequence']}.mp4"
+                try:
+                    with open(readme,"r") as f:
+                        video["description"] = f.read()
+                except:
+                    pass
+                video["source"] = f"https://revue.b-cdn.net/{yaml_data['year']}/{video['sequence']}.mp4"
             data_list.append(yaml_data)  # Voeg toe aan de lijst
 
     # Sorteer van 2025 naar 1978
