@@ -185,7 +185,7 @@ document.addEventListener('alpine:init', () => {
                 text += "\n\n";
 
                 text += "<!-- Beschrijving -->\n";
-                text += this.item.beschrijving;
+                text += this.item.description;
                 text += "\n\n";
 
                 if (this.type == "edition"){
