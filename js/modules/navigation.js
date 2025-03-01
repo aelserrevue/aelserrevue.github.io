@@ -196,6 +196,7 @@ document.addEventListener('alpine:init', () => {
                     text += "\n\n";
                 } else {
                     filename = this.item.edition.title + " - " + this.item.title + ".md";
+                    text += "<!-- Medewerkers -->\n\n";
                 }
 
                 const blob = new Blob([text], { type: "text/plain" }); // Markdown is gewoon plain text

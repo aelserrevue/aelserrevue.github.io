@@ -1,5 +1,5 @@
 import os
-import json
+import yaml
 import re
 
 # Zorg ervoor dat de dropbox-map bestaat
@@ -64,12 +64,26 @@ def parse_markdown(inhoud):
 
 def verwerk_wijzigingen(data):
     for item in data:
-        print(item)
+        with open(f"../content/{item['id'].split('-')[0]}/data.yaml", "r", encoding="utf-8") as f:
+            yaml_data = yaml.safe_load(f)
+
         if "-" in item["id"]:
-            print("video")
+            with open(f"../content/{item['id'].split('-')[0]}/video/{item['id']}.md","w") as f:
+                f.write(item["beschrijving"])
+            video = [x for x in yaml_data["video"] if x["id"] == item["id"]][0]
+            video["title"] = item["titel"]
         else:
+            yaml_data["title"] = item["titel"]
             with open(f"../content/{item['id']}/README.md","w") as f:
                 f.write(item["beschrijving"])
+            with open(f"../content/{item['id']}/medewerkers.txt","w") as f:
+                for medewerker in item["medewerkers"]:
+                    f.write(medewerker + "\n")
+
+        with open(f"../content/{item['id'].split('-')[0]}/data.yaml", "w", encoding="utf-8") as f:
+            f.write(yaml.dump(yaml_data, allow_unicode=True))
+
+        os.remove(f"../dropbox/{item['bestand']}")
 
 if __name__ == "__main__":
     json_data = lees_markdown_bestanden(DROPBOX_MAP)

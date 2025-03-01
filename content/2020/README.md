@@ -1,4 +1,4 @@
-﻿"Ut Zetpilke" eine toepasselikke naam veur ein Medisch Zörg Centrum hè? 
+"Ut Zetpilke" eine toepasselikke naam veur ein Medisch Zörg Centrum hè? 
 Dit jaor numme veer uch mit nao de medische waereld. Ut Medisch Centrum is bezig mit ein verboewing, zwadat ut ein Medisch Zörg Centrum kent waere. 
 Mit de aanboew van eine vleugel weurt d'r ein geslaote aafdeiling toegevoeg aan ut Medisch Centrum. 
 Frau Doktor Helga von Flaushausen haet dan auch alles in wirking gesteld om de geslaote aafdeiling optied aaf te kriege, 
