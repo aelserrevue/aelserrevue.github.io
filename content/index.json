@@ -470,13 +470,6 @@
                 "source": "https://revue.b-cdn.net/2016/10.mp4"
             },
             {
-                "id": "2016-11",
-                "sequence": 11,
-                "title": "Pauze",
-                "description": "## Geen video\n",
-                "source": "https://revue.b-cdn.net/2016/11.mp4"
-            },
-            {
                 "id": "2016-12",
                 "sequence": 12,
                 "title": "Meziekaafdeiling 1",
@@ -777,13 +770,6 @@
                 "source": "https://revue.b-cdn.net/2014/10.mp4"
             },
             {
-                "id": "2014-11",
-                "sequence": 11,
-                "title": "Pauze",
-                "description": "*Nog geen beschrijving toegevoegd*",
-                "source": "https://revue.b-cdn.net/2014/11.mp4"
-            },
-            {
                 "id": "2014-12",
                 "sequence": 12,
                 "title": "Restaurant / Keuken",
@@ -824,13 +810,6 @@
                 "title": "Fjèsaovend",
                 "description": "*Nog geen beschrijving toegevoegd*",
                 "source": "https://revue.b-cdn.net/2014/17.mp4"
-            },
-            {
-                "id": "2014-18",
-                "sequence": 18,
-                "title": "Einde",
-                "description": "*Nog geen beschrijving toegevoegd*",
-                "source": "https://revue.b-cdn.net/2014/18.mp4"
             },
             {
                 "id": "2014-19",
@@ -934,13 +913,6 @@
                 "source": "https://revue.b-cdn.net/2013/11.mp4"
             },
             {
-                "id": "2013-12",
-                "sequence": 12,
-                "title": "Deel: 12",
-                "description": "*Nog geen beschrijving toegevoegd*",
-                "source": "https://revue.b-cdn.net/2013/12.mp4"
-            },
-            {
                 "id": "2013-13",
                 "sequence": 13,
                 "title": "Deel: 13",
@@ -1023,13 +995,6 @@
                 "title": "Deel: 24",
                 "description": "*Nog geen beschrijving toegevoegd*",
                 "source": "https://revue.b-cdn.net/2013/24.mp4"
-            },
-            {
-                "id": "2013-25",
-                "sequence": 25,
-                "title": "Deel: 25",
-                "description": "*Nog geen beschrijving toegevoegd*",
-                "source": "https://revue.b-cdn.net/2013/25.mp4"
             },
             {
                 "id": "2013-26",

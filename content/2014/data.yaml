@@ -31,9 +31,6 @@ video:
 - id: 2014-10
   sequence: 10
   title: Kamer behange
-- id: 2014-11
-  sequence: 11
-  title: Pauze
 - id: 2014-12
   sequence: 12
   title: Restaurant / Keuken
@@ -52,9 +49,6 @@ video:
 - id: 2014-17
   sequence: 17
   title: Fjèsaovend
-- id: 2014-18
-  sequence: 18
-  title: Einde
 - id: 2014-19
   sequence: 19
   title: Achter de schermen
