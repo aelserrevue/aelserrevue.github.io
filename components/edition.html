@@ -1,13 +1,53 @@
 <template x-component="edition">
     <template x-if="type == 'edition' && edit == false">
-        <div>
+        <div x-data="{album: $persist(false)}">
             <h1 class="text-2xl font-bold flex items-center gap-2" x-text="item.title"></h1>
             <hr class="my-4 border-t border-gray-300">
 
             <div class="grid grid-cols-12 gap-3">
                 <div class="col-span-9">
                     <div class="prose"
+                         x-show="!album" x-cloak x-transition
                          x-html="applyDaisyUIStyling(marked.parse(item.description))"></div>
+                    <div x-show="album" x-cloak x-transition>
+                        <style>
+                            .masonry {
+    column-count: 3; /* Aantal kolommen */
+    column-gap: 1rem; /* Ruimte tussen kolommen */
+}
+
+.masonry img,
+.masonry video {
+    width: 100%; /* Volledige breedte per kolom */
+    display: block; /* Voorkomt inline spacing issues */
+    margin-bottom: 1rem; /* Ruimte tussen items */
+    border-radius: 8px; /* Afronden voor een mooie uitstraling */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Zachte schaduw */
+}
+
+/* Zorgt ervoor dat video's zich goed gedragen */
+.masonry video {
+    object-fit: cover; /* Zorgt ervoor dat de video de beschikbare ruimte vult */
+    max-height: 400px; /* Beperk de hoogte zodat het past binnen de layout */
+}
+                        </style>
+                        <div class="masonry">
+                            <template x-for="src in item.album" :key="src">
+                                <div>
+                                    <template x-if="src.endsWith('.webp')">
+                                        <img :src="src" loading="lazy" class="rounded-lg shadow-md w-full h-auto" />
+                                    </template>
+
+                                    <template x-if="src.endsWith('.mp4')">
+                                        <video controls>
+                                            <source :src="src" type="video/mp4">
+                                            Je browser ondersteunt geen video-tag.
+                                        </video>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-span-3">
 
@@ -22,6 +62,12 @@
                     <button class="btn btn-block btn-primary btn-outline mt-5"
                             x-show="item.video.length > 0" x-cloak x-transition
                             @click="localStorage[item.year] ? navigate(localStorage[item.year]) : navigate(item.video.at(0).id)">Opname</button>
+
+                    <label class="swap swap-rotate btn btn-primary btn-outline btn-block mt-5">
+                        <input type="checkbox" x-model="album" />
+                        <span class="swap-on">Beschrijving</span>
+                        <span class="swap-off">Foto Album</span>
+                    </label>
 
                     <button @click="edit=true" class="btn btn-block btn-primary btn-outline my-5">
                         Heb jij een goede aanvulling?<br>Stuur ‘m op!

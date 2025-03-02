@@ -1,55 +1,70 @@
+album:
+- https://revue.b-cdn.net/albums/2020/19ad7105-6ce0-4bb8-a30a-77208cd02132_7F818E6D-7186-4E45-A061-A51CF14E6D71_opt.webp
+- https://revue.b-cdn.net/albums/2020/2913F8592C037EA97F8FAD07F5225C9C.out_web.mp4
+- https://revue.b-cdn.net/albums/2020/3366fda8-b9b8-4e2d-a4e6-daed6dfb3add_F5EB6FF0-3076-41BC-A121-7A90A4D8D4A5_opt.webp
+- https://revue.b-cdn.net/albums/2020/3629404e-b744-45b3-b284-cdd296a91e1d_858668F1-C4C7-4C4E-BF7B-E80FF3128968_opt.webp
+- https://revue.b-cdn.net/albums/2020/4e45730a-ab14-4c88-9e0e-0a0694868082_4991C116-29C5-4A8F-A7B9-E1A60A4EC6C0_opt.webp
+- https://revue.b-cdn.net/albums/2020/50514877-5624-40d7-9000-9c8fedac1c68_E43B412F-2FEB-4C77-9DD4-2712FF6B4335_opt.webp
+- https://revue.b-cdn.net/albums/2020/6c7f57d0-b33e-4b35-9b52-d9b23dbe3750_88AEBA0D-D3F7-403E-847E-5D5935FAACA6_opt.webp
+- https://revue.b-cdn.net/albums/2020/811fbd8f-0845-4350-a63c-1ec23f42b3fb_D1866AC5-A291-408D-AFDD-FA90F405E4FD_opt.webp
+- https://revue.b-cdn.net/albums/2020/872aa132-2baa-49b2-b118-9da0b1418f6a_A9114FC3-65C5-4C37-AC94-805A9401E328_opt.webp
+- https://revue.b-cdn.net/albums/2020/88736f4f-0668-4482-9502-14c37c5b8433_3C190412-90E2-448F-8419-C5D7A195A604_opt.webp
+- https://revue.b-cdn.net/albums/2020/9697c795-f6ca-4aaa-aeae-e7a892ac5422_5F981525-CDD2-4D88-A619-97A15D7C2871_opt.webp
+- https://revue.b-cdn.net/albums/2020/aa167ffc-63d3-4253-90eb-0f0dcd047a79_trim.251DE125-AE3A-46E9-9C83-FCD0EF13F3CB.out_web.mp4
+- https://revue.b-cdn.net/albums/2020/b5d65d77-7396-4a62-929b-abe92fea6f74_3688C754-CA67-45D6-A0AD-807DDD0E51CA_opt.webp
+- https://revue.b-cdn.net/albums/2020/c8d5bd4c-c614-4393-b929-0dcbc08e320a_trim.8CBE1A5C-DCAA-4B16-A4AD-14A0BE0DDC63.out_web.mp4
+- https://revue.b-cdn.net/albums/2020/ceaf0dad-322f-4321-b268-02aa860a7a94_C41FBC11-D613-48A0-9552-CEEDA7FA3E43_opt.webp
 edition: 2020
 title: Medisch Zorg Centrum ut Zetpilke
 video:
-  - id: 2020-1
-    sequence: 1
-    title: 'Deel: 1'
-  - id: 2020-2
-    sequence: 2
-    title: 'Deel: 2'
-  - id: 2020-3
-    sequence: 3
-    title: 'Deel: 3'
-  - id: 2020-4
-    sequence: 4
-    title: 'Deel: 4'
-  - id: 2020-5
-    sequence: 5
-    title: 'Deel: 5'
-  - id: 2020-6
-    sequence: 6
-    title: 'Deel: 6'
-  - id: 2020-7
-    sequence: 7
-    title: 'Deel: 7'
-  - id: 2020-8
-    sequence: 8
-    title: 'Deel: 8'
-  - id: 2020-9
-    sequence: 9
-    title: 'Deel: 9'
-  - id: 2020-10
-    sequence: 10
-    title: 'Deel: 10'
-  - id: 2020-11
-    sequence: 11
-    title: 'Deel: 11'
-  - id: 2020-12
-    sequence: 12
-    title: 'Deel: 12'
-  - id: 2020-13
-    sequence: 13
-    title: 'Deel: 13'
-  - id: 2020-14
-    sequence: 14
-    title: 'Deel: 14'
-  - id: 2020-15
-    sequence: 15
-    title: 'Deel: 15'
-  - id: 2020-16
-    sequence: 16
-    title: 'Deel: 16'
-  - id: 2020-17
-    sequence: 17
-    title: 'Deel: 17'
-
+- id: 2020-1
+  sequence: 1
+  title: 'Deel: 1'
+- id: 2020-2
+  sequence: 2
+  title: 'Deel: 2'
+- id: 2020-3
+  sequence: 3
+  title: 'Deel: 3'
+- id: 2020-4
+  sequence: 4
+  title: 'Deel: 4'
+- id: 2020-5
+  sequence: 5
+  title: 'Deel: 5'
+- id: 2020-6
+  sequence: 6
+  title: 'Deel: 6'
+- id: 2020-7
+  sequence: 7
+  title: 'Deel: 7'
+- id: 2020-8
+  sequence: 8
+  title: 'Deel: 8'
+- id: 2020-9
+  sequence: 9
+  title: 'Deel: 9'
+- id: 2020-10
+  sequence: 10
+  title: 'Deel: 10'
+- id: 2020-11
+  sequence: 11
+  title: 'Deel: 11'
+- id: 2020-12
+  sequence: 12
+  title: 'Deel: 12'
+- id: 2020-13
+  sequence: 13
+  title: 'Deel: 13'
+- id: 2020-14
+  sequence: 14
+  title: 'Deel: 14'
+- id: 2020-15
+  sequence: 15
+  title: 'Deel: 15'
+- id: 2020-16
+  sequence: 16
+  title: 'Deel: 16'
+- id: 2020-17
+  sequence: 17
+  title: 'Deel: 17'

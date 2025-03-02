@@ -1,81 +1,86 @@
+album:
+- https://revue.b-cdn.net/albums/2019/0c188830-d06a-4c5a-af33-1920ac75dda1_07744AEB-A5A4-4820-AA97-955429CDB26E_opt.webp
+- https://revue.b-cdn.net/albums/2019/17df4f99-7254-4d5f-84dc-184cdc5f1942_84FE8011-E733-4195-B1A1-563B93AFD8CE_opt.webp
+- https://revue.b-cdn.net/albums/2019/5ebb4fe2-c9ab-425f-8533-9ec948a2f90e_713C9B19-92E1-4853-BD79-C67F92629289_opt.webp
+- https://revue.b-cdn.net/albums/2019/fd71cc09-50d0-4587-aa71-c6338e22f496_trim.9A2B9FB0-B863-418B-A4D8-BE8337803CD2.out_web.mp4
 edition: 2019
 title: Fjesbjes en Ko
 video:
-  - id: 2019-1
-    sequence: 1
-    title: 'Deel: 1'
-  - id: 2019-2
-    sequence: 2
-    title: 'Deel: 2'
-  - id: 2019-3
-    sequence: 3
-    title: 'Deel: 3'
-  - id: 2019-4
-    sequence: 4
-    title: 'Deel: 4'
-  - id: 2019-5
-    sequence: 5
-    title: 'Deel: 5'
-  - id: 2019-6
-    sequence: 6
-    title: 'Deel: 6'
-  - id: 2019-7
-    sequence: 7
-    title: 'Deel: 7'
-  - id: 2019-8
-    sequence: 8
-    title: 'Deel: 8'
-  - id: 2019-9
-    sequence: 9
-    title: 'Deel: 9'
-  - id: 2019-10
-    sequence: 10
-    title: 'Deel: 10'
-  - id: 2019-11
-    sequence: 11
-    title: 'Deel: 11'
-  - id: 2019-12
-    sequence: 12
-    title: 'Deel: 12'
-  - id: 2019-13
-    sequence: 13
-    title: 'Deel: 13'
-  - id: 2019-14
-    sequence: 14
-    title: 'Deel: 14'
-  - id: 2019-15
-    sequence: 15
-    title: 'Deel: 15'
-  - id: 2019-16
-    sequence: 16
-    title: 'Deel: 16'
-  - id: 2019-17
-    sequence: 17
-    title: 'Deel: 17'
-  - id: 2019-18
-    sequence: 18
-    title: 'Deel: 18'
-  - id: 2019-19
-    sequence: 19
-    title: 'Deel: 19'
-  - id: 2019-20
-    sequence: 20
-    title: 'Deel: 20'
-  - id: 2019-21
-    sequence: 21
-    title: 'Deel: 21'
-  - id: 2019-22
-    sequence: 22
-    title: 'Deel: 22'
-  - id: 2019-23
-    sequence: 23
-    title: 'Deel: 23'
-  - id: 2019-24
-    sequence: 24
-    title: 'Deel: 24'
-  - id: 2019-25
-    sequence: 25
-    title: 'Deel: 25'
-  - id: 2019-26
-    sequence: 26
-    title: 'Deel: 26'
+- id: 2019-1
+  sequence: 1
+  title: 'Deel: 1'
+- id: 2019-2
+  sequence: 2
+  title: 'Deel: 2'
+- id: 2019-3
+  sequence: 3
+  title: 'Deel: 3'
+- id: 2019-4
+  sequence: 4
+  title: 'Deel: 4'
+- id: 2019-5
+  sequence: 5
+  title: 'Deel: 5'
+- id: 2019-6
+  sequence: 6
+  title: 'Deel: 6'
+- id: 2019-7
+  sequence: 7
+  title: 'Deel: 7'
+- id: 2019-8
+  sequence: 8
+  title: 'Deel: 8'
+- id: 2019-9
+  sequence: 9
+  title: 'Deel: 9'
+- id: 2019-10
+  sequence: 10
+  title: 'Deel: 10'
+- id: 2019-11
+  sequence: 11
+  title: 'Deel: 11'
+- id: 2019-12
+  sequence: 12
+  title: 'Deel: 12'
+- id: 2019-13
+  sequence: 13
+  title: 'Deel: 13'
+- id: 2019-14
+  sequence: 14
+  title: 'Deel: 14'
+- id: 2019-15
+  sequence: 15
+  title: 'Deel: 15'
+- id: 2019-16
+  sequence: 16
+  title: 'Deel: 16'
+- id: 2019-17
+  sequence: 17
+  title: 'Deel: 17'
+- id: 2019-18
+  sequence: 18
+  title: 'Deel: 18'
+- id: 2019-19
+  sequence: 19
+  title: 'Deel: 19'
+- id: 2019-20
+  sequence: 20
+  title: 'Deel: 20'
+- id: 2019-21
+  sequence: 21
+  title: 'Deel: 21'
+- id: 2019-22
+  sequence: 22
+  title: 'Deel: 22'
+- id: 2019-23
+  sequence: 23
+  title: 'Deel: 23'
+- id: 2019-24
+  sequence: 24
+  title: 'Deel: 24'
+- id: 2019-25
+  sequence: 25
+  title: 'Deel: 25'
+- id: 2019-26
+  sequence: 26
+  title: 'Deel: 26'
