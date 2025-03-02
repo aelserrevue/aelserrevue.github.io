@@ -1,53 +1,104 @@
 <template x-component="edition">
     <template x-if="type == 'edition' && edit == false">
-        <div x-data="{album: $persist(false)}">
+        <div x-data="{album: $persist('')}">
             <h1 class="text-2xl font-bold flex items-center gap-2" x-text="item.title"></h1>
             <hr class="my-4 border-t border-gray-300">
 
             <div class="grid grid-cols-12 gap-3">
                 <div class="col-span-9">
                     <div class="prose"
-                         x-show="!album" x-cloak x-transition
+                         x-show="!album.includes(item.year)" x-cloak x-transition
                          x-html="applyDaisyUIStyling(marked.parse(item.description))"></div>
-                    <div x-show="album" x-cloak x-transition>
-                        <style>
-                            .masonry {
-    column-count: 3; /* Aantal kolommen */
-    column-gap: 1rem; /* Ruimte tussen kolommen */
-}
 
-.masonry img,
-.masonry video {
-    width: 100%; /* Volledige breedte per kolom */
-    display: block; /* Voorkomt inline spacing issues */
-    margin-bottom: 1rem; /* Ruimte tussen items */
-    border-radius: 8px; /* Afronden voor een mooie uitstraling */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Zachte schaduw */
-}
+                    <div x-data="{ fullscreenSrc: null, isVideo: false }">
+                        <div x-show="album.includes(item.year)" x-cloak x-transition>
+                            <style>
+                                .masonry {
+                                    column-count: 3; /* Aantal kolommen */
+                                    column-gap: 1rem; /* Ruimte tussen kolommen */
+                                }
 
-/* Zorgt ervoor dat video's zich goed gedragen */
-.masonry video {
-    object-fit: cover; /* Zorgt ervoor dat de video de beschikbare ruimte vult */
-    max-height: 400px; /* Beperk de hoogte zodat het past binnen de layout */
-}
-                        </style>
-                        <div class="masonry">
-                            <template x-for="src in item.album" :key="src">
-                                <div>
-                                    <template x-if="src.endsWith('.webp')">
-                                        <img :src="src" loading="lazy" class="rounded-lg shadow-md w-full h-auto" />
-                                    </template>
+                                .masonry img,
+                                .masonry video {
+                                    width: 100%; /* Volledige breedte per kolom */
+                                    display: block; /* Voorkomt inline spacing issues */
+                                    margin-bottom: 1rem; /* Ruimte tussen items */
+                                    border-radius: 8px; /* Afronden voor een mooie uitstraling */
+                                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Zachte schaduw */
+                                    cursor: pointer; /* Geeft aan dat het klikbaar is */
+                                }
 
-                                    <template x-if="src.endsWith('.mp4')">
-                                        <video controls>
-                                            <source :src="src" type="video/mp4">
-                                            Je browser ondersteunt geen video-tag.
-                                        </video>
-                                    </template>
-                                </div>
+                                .masonry video {
+                                    object-fit: cover; /* Zorgt ervoor dat de video de beschikbare ruimte vult */
+                                    max-height: 400px; /* Beperk de hoogte zodat het past binnen de layout */
+                                }
+
+                                /* Fullscreen overlay */
+                                .fullscreen-overlay {
+                                    position: fixed;
+                                    inset: 0;
+                                    background: rgba(0, 0, 0, 0.8);
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    z-index: 50;
+                                }
+
+                                .fullscreen-content {
+                                    max-width: 90vw;
+                                    max-height: 90vh;
+                                    border-radius: 10px;
+                                    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
+                                }
+                            </style>
+
+                            <div class="masonry">
+                                <template x-for="src in item.album" :key="src">
+                                    <div>
+                                        <template x-if="src.endsWith('.webp')">
+                                            <img :src="src" loading="lazy" @click="fullscreenSrc = src; isVideo = false" />
+                                        </template>
+
+                                        <template x-if="src.endsWith('.mp4')">
+                                            <div class="relative" x-data="{videoDuration: 0}">
+                                                <video
+                                                        @click="isVideo = false; setTimeout(() => { fullscreenSrc = src; isVideo = true }, 100)"
+                                                        @loadedmetadata="videoDuration = Math.floor($event.target.duration)"
+                                                        class="w-full rounded-lg shadow-md"
+                                                        muted playsinline>
+                                                    <source :src="src" type="video/mp4">
+                                                    Je browser ondersteunt geen video-tag.
+                                                </video>
+
+                                                <!-- Overlay met play-icoon en videoduur -->
+                                                <div class="absolute inset-0 flex items-center justify-center bg-black/30 rounded-lg pointer-events-none">
+                                                    <i class="fa-solid fa-play text-white text-3xl"></i>
+                                                </div>
+
+                                                <div class="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                                                    <span x-text="formatTime(videoDuration)"></span>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- Fullscreen Modal -->
+                        <div x-show="fullscreenSrc" class="fullscreen-overlay" @click="fullscreenSrc = null" x-transition>
+                            <template x-if="isVideo && fullscreenSrc">
+                                <video class="fullscreen-content" controls autoplay>
+                                    <source :src="fullscreenSrc" type="video/mp4">
+                                </video>
+                            </template>
+
+                            <template x-if="!isVideo">
+                                <img :src="fullscreenSrc" class="fullscreen-content">
                             </template>
                         </div>
                     </div>
+
                 </div>
                 <div class="col-span-3">
 
@@ -63,8 +114,9 @@
                             x-show="item.video.length > 0" x-cloak x-transition
                             @click="localStorage[item.year] ? navigate(localStorage[item.year]) : navigate(item.video.at(0).id)">Opname</button>
 
-                    <label class="swap swap-rotate btn btn-primary btn-outline btn-block mt-5">
-                        <input type="checkbox" x-model="album" />
+                    <label x-show="item.album.length > 0" x-cloak x-transition class="swap swap-rotate btn btn-primary btn-outline btn-block mt-5">
+                        <input type="checkbox" :checked="album.includes(item.year)"
+                               @change="if($el.checked){album += `+${item.year}+`} else {album = album.replaceAll(`+${item.year}+`,'')}"/>
                         <span class="swap-on">Beschrijving</span>
                         <span class="swap-off">Foto Album</span>
                     </label>
